@@ -13,7 +13,7 @@
     <div id = "body" style="margin-left: 100px; margin-right: 100px">
     <h1 class="message" style="margin-top: 50px"> Send Calendar </h1>
     <p>Thanks for creating a calendar!</p>
-    <p>Use the following link: <a href="http://localhost:1234/finished_calendar/<%= calendarUrl %>">http://localhost:1234/finished_calendar/<%= calendarUrl %></a> or code <strong><%= calendarUrl %></strong> on the home page.</p>
+    <p>Use the following link: <a href="<%= baseUrl %>/finished_calendar/<%= calendarUrl %>"><%= baseUrl %>/finished_calendar/<%= calendarUrl %> </a> or code <strong><%= calendarUrl %></strong> on the home page.</p>
     <p>Alternatively, enter a list of emails, separating each email with a newline, to send them the calendar link.</p>
     <div class="form-group" style="width: 800px;">
         <textarea class="form-control" id="emails" rows="4"></textarea>
