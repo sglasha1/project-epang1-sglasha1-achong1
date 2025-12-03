@@ -53,7 +53,8 @@ async function submit_reminder() {
 
 async function update_reminder() {
     console.log('button clicked');
-    const selectedName = document.getElementById('nameSelect');
+    const selectedName = document.getElementById('nameSelect2');
+    console.log('selected name')
     const selected = document.getElementById('addSelect2');
     const desc = document.getElementById('description2');
     const selected_reminder = document.getElementById('selectReminder');
@@ -180,6 +181,6 @@ window.addEventListener('DOMContentLoaded', () => {
     nameSelect2.value = "";
     
     // Refresh the Bootstrap Select UI
-    $('#nameSelect').selectpicker('refresh');
-    $('#nameSelect2').selectpicker('refresh');
+    // $('#nameSelect').selectpicker('refresh');
+    // $('#nameSelect2').selectpicker('refresh');
 });
