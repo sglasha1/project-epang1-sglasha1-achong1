@@ -2,7 +2,7 @@
 
 //Old function: this is for using the boxes.
 async function addPreference(){
-    console.log("adding preference ...");
+    // console.log("adding preference ...");
     const username = document.getElementById("username").value;
     const prefLevel = document.getElementById("level").value;
     const startDate = document.getElementById("startDate").value;
@@ -12,14 +12,14 @@ async function addPreference(){
     const endTimeAMPM = document.getElementById("endTimeAMPM").value;
     const startString = startDate + " " + startTime + " " + startTimeAMPM;
     const endString = startDate + " " + endTime + " " + endTimeAMPM;
-    console.log("startString:", startString);
-    console.log("endString:", endString);
+    // console.log("startString:", startString);
+    // console.log("endString:", endString);
     const startDateObj = new Date(startString);
     const endDateObj = new Date(endString);
     const startMS = startDateObj.getTime();
     const endMS = endDateObj.getTime();
-    console.log("startMS:", startMS);
-    console.log("endMS:", endMS);
+    // console.log("startMS:", startMS);
+    // console.log("endMS:", endMS);
     const interval = [startMS, endMS];
     let rank = " ";
     if(prefLevel === "1"){
@@ -54,25 +54,40 @@ async function updatePreferences(){
   console.log("adding preference ...");
   const docSpot = document.getElementById("your_schedule");
   const allAvailable = Array.from(docSpot.querySelectorAll(".yellowgreen"));
+  const allPreferred = Array.from(docSpot.querySelectorAll(".green"));
+  const path = window.location.pathname; 
+  const id = path.split("/").pop(); 
+  const data = {username: username, id: id}
+  try {
+    const response = await fetch('/api/calendar/delete_curr', {
+      method: "DELETE",
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(data)
+    })
+    console.log(response.text());
+  }
+  catch (error) {
+      console.error('Error:', error);
+    }
   /*
   console.log("Found all available");
   console.log("Green elements:", allAvailable);
   console.log("# of green elements:", allAvailable.length);
   console.log("allAvailable:", allAvailable);
   */
-  allAvailable.forEach(async (slot) => {
-    console.log("Checking slot:", slot.dataset);
-  });
+  // allAvailable.forEach(async (slot) => {
+  //   console.log("Checking slot:", slot.dataset);
+  // });
 
   for(const slot of allAvailable){
     try {
-    console.log("Working on:", slot.dataset);
-    console.log("checking an available slot");
+    // console.log("Working on:", slot.dataset);
+    // console.log("checking an available slot");
     let slotDate = slot.dataset.date;
-    console.log("slotDate is originally:", slotDate);
+    // console.log("slotDate is originally:", slotDate);
     let slotHour = slot.dataset.hour;
     let slotQuarter = slot.dataset.quarter;
-    console.log("slotQuarter is originally:", slotQuarter);
+    // console.log("slotQuarter is originally:", slotQuarter);
     let startDate = slot.dataset.startdate;
     let startTime = slot.dataset.starttime;
     let timeMS = getSlotMS(startDate, startTime, slotDate, slotHour, slotQuarter);
@@ -94,12 +109,12 @@ async function updatePreferences(){
     }
   };
 
-
-  const allPreferred = Array.from(docSpot.querySelectorAll(".green"));
+  
+  
   allPreferred.forEach(async (slot) => {
     console.log("Checking slot:", slot.dataset);
   });
-
+  console.log("Preferred count:", allPreferred.length);
   for(const slot of allPreferred){
     try {
     console.log("Working on:", slot.dataset);
@@ -130,34 +145,37 @@ async function updatePreferences(){
     }
   };
 
+  const save_message = document.getElementById('save_message');
+  save_message.innerHTML = "<p>Successfully added availability!</p>"
+
 }
 
 
 function getSlotMS(startDate, startTime, slotDate, slotHour, slotQuarter){
-  console.log("In getSlotMS");
+  // console.log("In getSlotMS");
   const fifteen = 15 * 60000;
   const day = 86400000;
   let intStartTime = parseInt(startTime);
   let intSlotHour = parseInt(slotHour);
   let intSlotQuarter = parseInt(slotQuarter);
   let intSlotDate = parseInt(slotDate);
-  console.log("intSlotQuarter:", intSlotQuarter);
+  // console.log("intSlotQuarter:", intSlotQuarter);
   let startHour = intSlotHour;
   let quarterMS = intSlotQuarter * fifteen;
   let startDateObj = new Date(`${startDate}T${startHour.toString().padStart(2, '0')}:00:00`);
-  console.log("startDate:", startDate);
-  console.log("startHour:", startHour);
-  console.log("startDateObj:", startDateObj);
+  // console.log("startDate:", startDate);
+  // console.log("startHour:", startHour);
+  // console.log("startDateObj:", startDateObj);
   let almostMs = startDateObj.getTime();
-  console.log("almostMs:", almostMs);
-  console.log("quarterMS:", quarterMS);
-  console.log("intSlotDate:", intSlotDate);
+  // console.log("almostMs:", almostMs);
+  // console.log("quarterMS:", quarterMS);
+  // console.log("intSlotDate:", intSlotDate);
   let dayAdjustment = day * intSlotDate;
-  console.log("dayAdjustment:", dayAdjustment);
+  // console.log("dayAdjustment:", dayAdjustment);
   let actualMs = almostMs + quarterMS + dayAdjustment;
   let endMs = actualMs + fifteen;
-  console.log("actualMs:", actualMs);
-  console.log("endMs:", endMs);
+  // console.log("actualMs:", actualMs);
+  // console.log("endMs:", endMs);
 
   return [actualMs, endMs];
 }
@@ -288,6 +306,17 @@ function colorByScore(score) {
   return "Good4";
 }
 
+function colorByScoreCurrUser(score) {
+    if (score <= -3) return "gray";
+    if (score <= -2) return "gray";
+    if (score <= -1) return "gray";
+    if (score <=  0) return "gray";
+    if (score <=  1) return "gray";
+    if (score <=  2) return "yellowgreen";
+    if (score <= 2.5) return "yellowgreen";
+    if (score <   3) return "Good3";
+    return "Good3";
+}
 async function displayGroup() {
   let btn = document.getElementById('groupTimes');
   let allSched = document.getElementById('all_schedules');
@@ -340,11 +369,77 @@ async function displayGroup() {
   }
 }
 
+async function display_curr_choices() {
+  username = document.getElementById('username').value;
+  your_schedule = document.getElementById('your_schedule');
+  const path = window.location.pathname; 
+  const id = path.split("/").pop(); 
+  const data = {username: username, id: id};
+  
+  try { 
+    response = await fetch(`/api/calendar/get_curr_choices/`, {
+      method: "POST",
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(data)
+    });
+
+  const result = await response.json();
+  const raw = result.choices.preferences;   
+  console.log(raw);
+  const pref = JSON.parse(raw);
+  console.log("pref", pref);
+  let boxes = your_schedule.querySelectorAll(".curr_slot");
+  console.log(boxes);
+  for (const slot of boxes) {
+    let slotDate = slot.dataset.date;
+    let slotHour = slot.dataset.hour;
+    let slotQuarter = slot.dataset.quarter;
+    let startDate = slot.dataset.startdate;
+    let startTime = slot.dataset.starttime;
+
+    let timeMS = getSlotMS(startDate, startTime, slotDate, slotHour, slotQuarter);
+
+    // compute color directly (no extra fetch)
+    let newClass = await (async () => {
+      if (matchesStart(pref.rank1, timeMS[0])) {
+        return "green";
+      }
+      else if (matchesStart(pref.rank2, timeMS[0])) {
+        return "yellowgreen";
+      }
+      else {
+        return "gray";
+      }
+    })();
+
+    // assign class cleanly
+    slot.classList.remove('gray', 'yellowgreen', 'green');
+    slot.className = `curr_slot ${newClass}`;
+  }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+  }
+  
+function displayCal() {
+  const name = document.getElementById("username").value.trim();
+  if (!name) {
+      document.getElementById("error").innerText = "Please enter a name!";
+      return;
+  }
+  document.getElementById("error").innerText = "";
+  display_curr_choices()
+  document.getElementById("content").style.display = "flex";
+  document.getElementById("username").disabled = true;
+  document.getElementById("button-toggle").style.display = "flex";
+  this.disabled = true;
+}
+
 
 
 
 document.getElementById('groupTimes').addEventListener('click', displayGroup);
-
+document.getElementById('name_submit').addEventListener('click', displayCal);
 
 //TODO: do the rectangle selection
 // so basically put everything into an array and form there you can calculate which boxes should be toggled
