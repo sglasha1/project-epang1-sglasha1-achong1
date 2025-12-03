@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href = "/public/css/style.css">
     <link rel="stylesheet" href = "/public/css/profile.css">
+    <link rel="icon" href="/public/images/favicon.png" type="image/png"> 
+
 
   </head>
   <body>
@@ -134,6 +136,7 @@
                 <div class="col">
                     <p><%= friend.name %></p>
                     <button class="friend-details mb-3" data-target="text-<%= friend.id %>">Show Details</button>
+                    <% console.log('text-' + friend.id + friend.description) %>
                     <p id="text-<%= friend.id %>" class="hidden"> <%= friend.description %> </p>
                 </div>
                 <div class="col">
