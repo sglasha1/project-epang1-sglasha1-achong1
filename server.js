@@ -790,17 +790,18 @@ app.get("/finished_calendar/:url", async(req, res) => {
 });
 
 app.post("/api/calendar/get_curr_choices", async(req, res) => {
-  console.log('getting curr choices')
-  const calendarUrl = req.body.id;
+  const hashed_id = req.body.hashed_id;
   const username = req.body.username;
-  const calendarInfo = await getCalendarInfo(calendarUrl, username);
-  if(calendarInfo !== null){
-    res.status(200).json({choices: calendarInfo})
-  }
-  else {
-    return null
+
+  const calendarInfo = await getCalendarInfo(hashed_id, username);
+
+  if (calendarInfo !== null) {
+    res.status(200).json({ choices: calendarInfo });
+  } else {
+    res.status(200).json({ choices: null });
   }
 });
+
 
 app.post("/finished_calendar/:url", async(req, res) => {
   console.log('finished calendar')
