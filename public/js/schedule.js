@@ -1,3 +1,10 @@
+// Convert into local-midnight milliseconds without timezone shift
+function dateToLocalMs(dateStr) {
+    const [y, m, d] = dateStr.split("-").map(Number);
+    return new Date(y, m - 1, d).getTime(); 
+}
+
+
 function quickSort(arr) {
   if (arr.length <= 1) return arr;
 
@@ -72,11 +79,8 @@ async function optimalMeetingTime(){
         let sdateStr = calInfo.start_date;
         let edateStr = calInfo.end_date;
         console.log("sdateStr:", sdateStr);
-        let start_date = new Date(sdateStr);
-        let end_date = new Date(edateStr);
-        console.log("start_date:", start_date);
-        let start = start_date.getTime();
-        let end = end_date.getTime() + 86400000;
+        let start = dateToLocalMs(sdateStr);
+        let end = dateToLocalMs(edateStr) + 86400000;
         let users = [];
         let allRows = await getCalendarInfo(calendarURL);
         console.log("allRows:", allRows);
@@ -148,48 +152,60 @@ function getAllTimes(start, end){
 }
 
 function calculateScore(time, users, timeRequired){
+    console.log("----------");
+    console.log("Scoring time:", new Date(time));
+
     let utility = 0;
+
     //Adds a certain amount for each user
     for(const user of users){
-        console.log("typeof user:", typeof user);
-        if(!user || !user.rank1){
-            console.log("BAD PREFERENCE ENTRY:", user);
-        }
-        /*
-        console.log("User is:", user);
-        console.log("user.rank1:", user.rank1);
-        */
+
+        console.log("User intervals:", {
+            rank1: user.rank1,
+            rank2: user.rank2
+        });
+
         let inRank1 = false;
-        for(const interval of user.rank1){
-            //Checks if the time works for rank1
-            if(contains(time, interval, timeRequired)){
+        for (const interval of user.rank1) {
+            if (contains(time, interval, timeRequired)) {
                 inRank1 = true;
             }
         }
-        //Adds 2 points of utility if rank1
-        if(inRank1){
-            utility = utility + 2;
-        }
-        else{
-            let inRank2 = false;
-            for(const interval of user.rank2){
-                //Checks if the time works for rank2
-                if(contains(time, interval, timeRequired)){
+
+        let inRank2 = false;
+        if (!inRank1) {
+            for (const interval of user.rank2) {
+                if (contains(time, interval, timeRequired)) {
                     inRank2 = true;
                 }
             }
+        }
+
+        console.log(
+            "Result for this user:",
+            inRank1 ? "Rank1" : (inRank2 ? "Rank2" : "Unavailable")
+        );
+
+        //Adds 2 points of utility if rank1
+        if (inRank1) {
+            utility += 2;
+        } else {
             //Adds 1 point of utility if rank2
-            if(inRank2){
-                utility = utility + 1;
-            }
-            else{
+            if (inRank2) {
+                utility += 1;
+            } else {
                 //Takes away 100 if isn't even rank2
-                utility = utility - 100;
+                utility -= 100;
             }
         }
     }
+
+    console.log("Total utility for this time:", utility);
+
     return utility;
 }
+
+
 
 function contains(time, interval, timeRequired){
     const start = interval[0];
