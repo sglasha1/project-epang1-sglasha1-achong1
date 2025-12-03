@@ -6,11 +6,13 @@
     <link rel="stylesheet" href="/css/register.css">
     <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href = "/public/css/style.css">
+    <link rel="icon" href="/public/images/favicon.png" type="image/png"> 
+
 
     <title>Log in</title>
   </head>
   <body>
-    <%- include("partials/header.ejs") %>
+    <%- include("partials/header.ejs", { user: locals.user, next: locals.next}) %>
     <h1 class="message" style="margin-top: 50px"> Log in</h1>
     <div class = "mainContent">
     <div class = "RegBox">
@@ -32,7 +34,7 @@
         <button type="submit" class="register" id="create" style="background-color: brown; color: white;">
             Log in
         </button>
-        <input type="hidden" name="next" value="<%=next%>">
+        <input type="hidden" name="next" value="<%= locals.next %>">
         </form>
         <br>
         <br>
