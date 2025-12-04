@@ -60,3 +60,34 @@ document.querySelectorAll(".last_seen_input").forEach(input => {
   input.addEventListener("change", updateLastSeen);
 });
 document.getElementById('submit_email').addEventListener('click', send_email);
+
+const btn1 = document.getElementById("toggleInfoBtn1");
+const box1 = document.getElementById("infoBox1");
+btn1.addEventListener("click", () => {
+  if (box1.style.display === "none") {
+    box1.style.display = "block";
+  } else {
+    box1.style.display = "none";
+  }
+});
+
+const btn2 = document.getElementById("toggleInfoBtn2");
+const box2 = document.getElementById("infoBox2");
+btn2.addEventListener("click", () => {
+  if (box2.style.display === "none") {
+    box2.style.display = "block";
+  } else {
+    box2.style.display = "none";
+  }
+});
+
+
+const btn3 = document.getElementById("toggleInfoBtn3");
+const box3 = document.getElementById("infoBox3");
+btn3.addEventListener("click", () => {
+  if (box3.style.display === "none") {
+    box3.style.display = "block";
+  } else {
+    box3.style.display = "none";
+  }
+});
