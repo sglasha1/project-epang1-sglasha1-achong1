@@ -22,14 +22,20 @@ submitButton.addEventListener('click', async (event) => {
         return;
     }
     let startTime24 = parseInt(startTime.value, 10);
-    if (startTimeAMPM.value === "PM") {
+    if ((startTimeAMPM.value === "PM") && (startTime24 !== 12)) {
         startTime24 = startTime24 + 12;
+    } else if ((startTimeAMPM.value === "AM") && (startTime24 === 12)) {
+        startTime24 = 0;
     }
     let endTime24 = parseInt(endTime.value, 10);
-    if (endTimeAMPM.value === "PM") {
-        endTime24 = endTime24 + 12;
+    if ((endTimeAMPM.value === "PM") && (endTime24 !== 12)) {
+        endTime24 = endTime24 + 11;
+    } else if ((endTimeAMPM.value === "AM") && (endTime24 === 12)) {
+        endTime24 = 23;
+    } else {
+        endTime24--;
     }
-    if (startTime24 >= endTime24) {
+    if (startTime24 > endTime24) {
         errorMessage.innerHTML = "End time must be after start time."
         return;
     }
