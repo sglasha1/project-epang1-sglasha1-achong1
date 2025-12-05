@@ -111,6 +111,12 @@ app.route("/send_calendar")
     res.sendStatus(200);
 })
 
+app.get("/send_calendar/:url", async(req, res) => {
+  const calendarUrl = req.params.url;
+  const username = req.query.username;
+  res.render("send_calendar.ejs", {user: username, calendarUrl: calendarUrl});
+});
+
 function getUserID(username){
     return new Promise((resolve, reject) =>{
     DB.get('SELECT * FROM users WHERE username = ?', [username], (err, row)=>{
