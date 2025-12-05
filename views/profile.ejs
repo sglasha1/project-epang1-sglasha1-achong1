@@ -153,7 +153,7 @@
                   <%} %>" style="max-width: 100%;">
                 </div>
                 <div class="col">
-                    <p><%= friend.name %></p>
+                    <p><h4><%= friend.name %></h4></p>
                     <button class="friend-details mb-3" data-target="text-<%= friend.id %>" style="background-color:brown">Show Details</button>
                     <% console.log('text-' + friend.id + friend.description) %>
                     <p id="text-<%= friend.id %>" class="hidden"> <%= friend.description %> </p>
@@ -163,7 +163,7 @@
                 </div>
               </div>
               <div class="row mt-2">
-                <p><% if (friend.last_seen) { %> Last seen <%=friend.last_seen%>. Update date below: <%} else { %>Add when you last saw your friend below!<%}%></p>
+                <p><% if (friend.last_seen) { %> Last seen <strong><%=friend.last_seen%></strong>. Update date below: <%} else { %>Add when you last saw your friend below!<%}%></p>
                 <div id="friend_update_msg-<%= friend.id %>" style="margin-top: -10px; margin-bottom: 5px"></div>
                 <input type="date" class = "last_seen_input" data-friend-id="<%= friend.id %>" style="margin-left: 10px; max-width: 25%;">
               </div>
