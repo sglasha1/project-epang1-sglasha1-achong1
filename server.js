@@ -70,6 +70,12 @@ app.get("/", async(req, res) => {
   res.render("index.ejs", {user: username});
 });
 
+app.get("/send_calendar/:url", async(req, res) => {
+  const calendarUrl = req.params.url;
+  const username = req.query.username;
+  res.render("send_calendar.ejs", {user: username, calendarUrl: calendarUrl});
+});
+
 app.route("/send_calendar")
   .get(async (req, res) => {
     const calendarUrl = req.query.url;
@@ -110,12 +116,6 @@ app.route("/send_calendar")
     console.log('emails sent!');
     res.sendStatus(200);
 })
-
-app.get("/send_calendar/:url", async(req, res) => {
-  const calendarUrl = req.params.url;
-  const username = req.query.username;
-  res.render("send_calendar.ejs", {user: username, calendarUrl: calendarUrl});
-});
 
 function getUserID(username){
     return new Promise((resolve, reject) =>{
