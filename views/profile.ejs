@@ -127,12 +127,15 @@
             <% if(num === 0){ %>
               <div class="row row-cols-auto">
                 <div class="col"> <button id="toggleInfoBtn3" class="info-toggle">i</button> </div>
-                <div class="col"><p>You have no friends ... yet!</p></div>
+                <div class="col"><h4><strong>All Friends</strong></h4></div>
+                
                 <div class="col"><p><a href="/update_friends">Create New</a></p></div>
             </div>
+            
             <div class="info-box" style="display: none;" id="infoBox3">
             You can keep a list of your real-life friends here. Your friend does not need a Friendule account for this. Once you put friends on your list here, you can keep track of when you last saw them.
             </div>
+            <p>You have no friends ... yet!</p>
             <%}else{ %>
               <div class="row row-cols-auto">
               <div class="col"> <button id="toggleInfoBtn3" class="info-toggle">i</button> </div>
@@ -151,7 +154,7 @@
                 </div>
                 <div class="col">
                     <p><%= friend.name %></p>
-                    <button class="friend-details mb-3" data-target="text-<%= friend.id %>">Show Details</button>
+                    <button class="friend-details mb-3" data-target="text-<%= friend.id %>" style="background-color:brown">Show Details</button>
                     <% console.log('text-' + friend.id + friend.description) %>
                     <p id="text-<%= friend.id %>" class="hidden"> <%= friend.description %> </p>
                 </div>
@@ -160,9 +163,9 @@
                 </div>
               </div>
               <div class="row mt-2">
-                <p>Last seen <% if (friend.last_seen) { %> <%=friend.last_seen%><% } else { %>unknown<%}%>. Update date below:</p>
+                <p><% if (friend.last_seen) { %> Last seen <%=friend.last_seen%>. Update date below: <%} else { %>Add when you last saw your friend below!<%}%></p>
                 <div id="friend_update_msg-<%= friend.id %>" style="margin-top: -10px; margin-bottom: 5px"></div>
-                <input type="date" class = "last_seen_input" data-friend-id="<%= friend.id %>" style="margin-left: 10px; max-width: 20%;">
+                <input type="date" class = "last_seen_input" data-friend-id="<%= friend.id %>" style="margin-left: 10px; max-width: 25%;">
               </div>
               <hr style="margin-top: 20px; margin-left: 10px; width: 97%;">
               

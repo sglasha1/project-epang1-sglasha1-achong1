@@ -18,13 +18,16 @@
         Welcome!
       <% } %>
     </h1>
+    
     <div class="row" style="height: 200px; margin-top: 25px;">
+      <% if (!(user && user.username)) { %>
         <div class="col">
           <h3><a href="login">Log In/Register</a></h3>
         </div>
         <div style="width: 100px;">
           <div class="vr" style="height: 300px;"></div>
         </div>
+        <% } %>
         <div class="col">
           <h3><a href="create_calendar">Create Calendar</a></h3>
           <p>or find calendar with code:</p>

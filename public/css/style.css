@@ -11873,4 +11873,16 @@ button.btn.btn-primary {
   color: white !important;
 }
 
+.nav-link.active {
+  color: brown !important;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.navbar-brand.active {
+  color: brown !important;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
 /*# sourceMappingURL=style.css.map */

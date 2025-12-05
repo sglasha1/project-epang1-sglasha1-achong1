@@ -18,3 +18,15 @@ button.btn.btn-primary {
     border-color: brown !important;
     color: white !important;
 }
+
+.nav-link.active {
+    color: brown !important;   
+    font-weight: bold;            
+    text-decoration: underline;   
+  }
+
+.navbar-brand.active {
+    color: brown !important;   
+    font-weight: bold;            
+    text-decoration: underline;   
+  }

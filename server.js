@@ -38,6 +38,11 @@ app.use(session({
   cookie: { secure: false, maxAge: 24 * 60 * 60 * 1000} // Set true if using HTTPS
 }));
 
+app.use((req, res, next) => {
+  res.locals.currentPath = req.path;
+  next();
+});
+
 import dotenv from 'dotenv';
 import sgMail from '@sendgrid/mail';
 
@@ -82,6 +87,7 @@ app.route("/send_calendar")
     const {email_list, url} = req.body;
     const baseUrl = 'https://project-epang1-sglasha1-achong1.onrender.com/send_calendar';
     const fullUrl = `${baseUrl}?url=${url}`;
+    const failed_emails = [];
     console.log(email_list);
     email_list.forEach(email => {   
     const msg = {
@@ -264,6 +270,7 @@ app.route("/update_friends")
      const userId = row.id;
      let parameters = [];
      let initial_sql = 'UPDATE friends SET '
+     let initial_reminder_sql = 'UPDATE reminders SET friend = ? WHERE friend = ?'
      let if_null_sql = []
      if (new_name) {
       if_null_sql.push("name = ?")
@@ -280,7 +287,7 @@ app.route("/update_friends")
      parameters.push(curr_name);
      parameters.push(userId);
      let sql_update = initial_sql + if_null_sql.join(", ") + ' WHERE name = ? AND user_id = ?'
-     
+     console.log(sql_update);
      if (if_null_sql.length === 0) {
       return res.status(400).json({ message: "No fields to update." });
     }
@@ -289,10 +296,28 @@ app.route("/update_friends")
          console.log(err);
          return res.status(500).send("Database error");
        }
-       console.log("User ID from session: ", userId);
-       console.log("Friend original name: ", curr_name);
-       console.log("success!");
-       return res.status(200).json({ message: 'Successfully updated friend! Refresh to see new list.' });
+       
+       //Update reminders accordingly
+       if (new_name) {
+        DB.run(initial_reminder_sql, [new_name, curr_name], (err) => {
+          if (err){
+            console.log(err);
+            return res.status(500).send("Database error");
+          }
+          else {
+            console.log("User ID from session: ", userId);
+            console.log("Friend original name: ", curr_name);
+            console.log("success!");
+            return res.status(200).json({ message: 'Successfully updated friend! Refresh to see new list.' });
+          }
+        })
+       }
+       else {
+        console.log("User ID from session: ", userId);
+        console.log("Friend original name: ", curr_name);
+        console.log("success!");
+        return res.status(200).json({ message: 'Successfully updated friend! Refresh to see new list.' });
+       }
      })
    })
  })
@@ -312,14 +337,20 @@ app.route("/update_friends")
       console.log(row);
       const userId = row.id;
       const sql_delete = 'DELETE FROM friends WHERE user_id = ? AND name = ?'
+      const reminder_delete = 'DELETE from reminders WHERE username = ? AND friend = ?'
       DB.run(sql_delete, [userId, name], (err) => {
         if (err) {
           console.log(err);
           return res.status(500).send("Database error");
         }
-        console.log("success!");
+        DB.run(reminder_delete, [username, name], (err) => {
+          if (err) {
+            console.log(err);
+            return res.status(500).send("Database error");
+          }
+          console.log("success!");
         res.status(200).json({ message: 'Successfully deleted friend! Refresh to see new list.' });
-      })
+        })})
     })
   })
 
@@ -602,8 +633,8 @@ app.route("/update_reminder")
       }
     
       // Update reminder in DB
-      const sql_update = 'UPDATE reminders SET job_id = ?, username = ?, friend = ?, frequency = ?, description = ? WHERE username = ? AND friend = ? AND job_id = ?';
-      DB.run(sql_update, [jobId, username, friendName, frequency, description, username, friendName, jobId], (err) => {
+      const sql_update = 'UPDATE reminders SET frequency = ?, description = ? WHERE username = ? AND friend = ? AND job_id = ?';
+      DB.run(sql_update, [frequency, description, username, friendName, jobId], (err) => {
         if (err) {
           console.log(err);
           return res.status(500).send("Database error");

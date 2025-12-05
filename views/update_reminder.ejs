@@ -16,6 +16,7 @@
       <div class="row justify-content-center">
         <div class="col text-start">
           <div><h3>Add Reminders</h3></div>
+          <% if (!(friends)) { %><p>You currently have 0 friends added. Add a friend <a href="/update_friends">here</a> to create a reminder!</p><% } %>
           <div id="reminder_notif"></div>
           <br>
           <div class="mb-3" style="margin-right:30px">

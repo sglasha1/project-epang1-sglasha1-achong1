@@ -2,23 +2,33 @@
 <center><a href ="/"><img src="/public/images/header.png" style="width: 30%;"></a></center>
 </div>
 <nav class="navbar navbar-expand-lg navbar-light bg-light" style="margin-top: 25px;">
-    <a class="navbar-brand" href="/" style="margin-left: 50px">Home</a>
+    <a class="navbar-brand <% if (currentPath === '/') { %>
+      active
+ <% } %>" href="/" style="margin-left: 50px">Home</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
         <%if (user) {%><li class="nav-item">
-          <a class="nav-link" href="/profile">Profile</a>
+          <a class="nav-link <% if (currentPath === '/profile') { %>
+            active
+       <% } %>" href="/profile">Profile</a>
         </li><% } %>
         <li class="nav-item">
-          <a class="nav-link" href="/create_calendar">Create Calendar</a>
+          <a class="nav-link <% if (currentPath === '/create_calendar') { %>
+            active
+       <% } %>" href="/create_calendar">Create Calendar</a>
         </li>
         <%if (user) {%><li class="nav-item">
-          <a class="nav-link" href="/update_friends">Manage Friends</a>
+          <a class="nav-link <% if (currentPath === '/update_friends') { %>
+            active
+       <% } %>" href="/update_friends">Manage Friends</a>
         </li><% } %>
         <%if (user) {%><li class="nav-item">
-            <a class="nav-link" href="/update_reminder">Manage Reminders</a>
+            <a class="nav-link <% if (currentPath === '/update_reminder') { %>
+              active
+         <% } %>" href="/update_reminder">Manage Reminders</a>
           </li><% } %>
           <%if (user) {%><li class="nav-item">
           <a class="nav-link" href="/logout">Log Out</a>
