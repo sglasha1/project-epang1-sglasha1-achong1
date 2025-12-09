@@ -23,7 +23,7 @@
             <div id="sign-in-code">
                 <div>
                     <% if (!user) { %>
-                    <p><a href="../login?next=/finished_calendar/<%= calendar.url %>">Sign in</a> to auto-fill or enter your name and press "next" to continue: </p>
+                    <p><a href="../login?next=/finished_calendar?url=<%= calendar.url %>">Sign in</a> to auto-fill or enter your name and press "next" to continue: </p>
                     <% } else { %>
                     <p>Enter your name and press "next" to continue:</p>
                     <% } %>

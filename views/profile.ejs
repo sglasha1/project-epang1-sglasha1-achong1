@@ -39,7 +39,7 @@
                     <p><%= calendars[i].info%></p>
                     <% const new_url = "finished_calendar/" + calendars[i].url%> 
                     <p><a href = <%= new_url%>>View Calendar</a></p>
-                    <% const new_url2 = "/send_calendar/" + calendars[i].url%>
+                    <% const new_url2 = "/send_calendar?url=" + calendars[i].url%>
                     <p><a href = "<%= new_url2%>">Share Calendar</a></p>
                 </div>
                 <div class="calendar" data-url = "<%= calendars[i].url %>">
