@@ -198,7 +198,10 @@ schedule.addEventListener('mouseup', () => {
 document.getElementById("save").addEventListener('click', updatePreferences);
 
 function timeToString(hour){
-    if(hour < 12){
+    if (hour == 0) {
+        return "12 AM";
+    } 
+    else if(hour < 12){
         let retStr = hour.toString() + " AM";
         return retStr;
     }
