@@ -41,9 +41,9 @@
             <label>
             <input type="radio" name="showExtra" value="no" id="noOption" checked> No
             </label>
-
+            <br/>
             <div id="extraSection" style="display:none;">
-            <p>Start Time</p>
+            <p>Earliest Time</p>
             <select name="startTime" id="startTime">
                 <option value="<%= 12 %>">12:00</option>
                 <% for (let i = 1; i < 12; i++) { %>
@@ -54,7 +54,8 @@
                 <option value="AM">AM</option>
                 <option value="PM">PM</option>
             </select>
-            <p>End Time</p>
+            <br/>
+            <p>Latest Time</p>
             <select name="endTime" id="endTime">
                 <option value="<%= 12 %>">12:00</option>
                 <% for (let i = 1; i < 12; i++) { %>
